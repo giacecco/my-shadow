@@ -1,0 +1,8 @@
+#!/bin/bash
+
+COMMAND='gpg -ea --always-trust --keyring ./secret/pubring.gpg'
+PUBLIC_KEYS=./secret/*.pub
+for FILE in $PUBLIC_KEYS; do
+    COMMAND="$COMMAND --keyring $FILE -r $(gpg --no-default-keyring --keyring $FILE --list-keys | grep "^sub" | grep -Po '(?<=/)[A-Z0-9]{8}(?= )')"
+done
+$COMMAND $1
