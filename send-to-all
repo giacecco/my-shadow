@@ -1,8 +1,12 @@
 #!/bin/bash
 
-COMMAND='gpg -ea --always-trust --keyring ./secret/pubring.gpg'
+TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
+COMMAND="gpg -ea --output $TEMP_FILE --always-trust"
 PUBLIC_KEYS=./secret/*.pub
 for FILE in $PUBLIC_KEYS; do
     COMMAND="$COMMAND --keyring $FILE -r $(gpg --no-default-keyring --keyring $FILE --list-keys | grep "^sub" | grep -Po '(?<=/)[A-Z0-9]{8}(?= )')"
 done
 $COMMAND $1
+GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
+t update "$GIST_URL" --profile=secret/twitter.credentials > /dev/null
+rm $TEMP_FILE
