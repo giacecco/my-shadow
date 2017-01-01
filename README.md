@@ -21,7 +21,8 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GNU PG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address) and a link to it is posted to your "shadow" Twitter feed.
 
-![example tweet](extras/doc/example-tweet.png "Example tweet")
+<blockquote class="twitter-tweet" data-lang="en-gb"><p lang="und" dir="ltr"><a href="https://t.co/NeE95yuY1G">https://t.co/NeE95yuY1G</a></p>&mdash; @giacecco&#39;s Shadow (@giaceccosshadow) <a href="https://twitter.com/giaceccosshadow/status/815283589197733889">31 December 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ## How do I decide who can read me?
 
