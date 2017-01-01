@@ -19,7 +19,11 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 ## How does it work?
 
-You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GNU PG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address) and a link to it is posted to your "shadow" Twitter feed.
+You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GNU PG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
+
+![example Gist](extras/doc/example-gist.png "Example Gist")
+
+A link to the encrypted message is posted to your "shadow" Twitter feed.
 
 ![example tweet](extras/doc/example-tweet.png "Example tweet")
 
