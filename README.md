@@ -56,6 +56,8 @@ By design, *my-shadow* relies on the generosity of the free services it is built
 
 - GitHub says that anonymous gists like the ones used by *my-shadow* [are never deleted](https://help.github.com/articles/creating-gists/#creating-an-anonymous-gist) but they may change their mind.
 
+The way the keypairs are not password protected is also a weakness, as it requires the user to be strict in limiting access to the files. However, we thought that the effort required of the user to store each reader's secret key password until the day the key is handed over to the reader would have added a level of complexity that was worse than the complication of the current solution.
+
 ## What's next
 
 Assuming you want someone to read you, it is not an easy job for them, as they need to manually decrypt the messages posted on Gist. I'll be soon writing a wrapper to *t* that automatically decrypts tweets that appear to be generated using *my-shadow*.
