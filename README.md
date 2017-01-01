@@ -9,7 +9,7 @@ my-shadow
 
 *my-shadow* is a prototype of social media service that breaks the social peacocking trap by allowing the user to unleash her Shadow.
 
-Unleashing a Shadow is good - and possibly even healthy - but unveiling it to anybody may be inappropriate or inconvenient. With *my-shadow* your updates are accessible to your trusted circle only, using end-to-end encryption over public channels, so that there is no cost for the service.
+Unleashing your Shadow is good - and possibly even healthy - but unveiling it to anybody may be inappropriate or inconvenient to say the least. With *my-shadow* your updates are accessible to your trusted circle only, using end-to-end encryption over public channels, so that there is no cost for the service.
 
 ## Do I need *my-shadow*?
 
@@ -19,7 +19,7 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 ## How does it work?
 
-You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GNU PG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
+You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GNU PG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address). The gists are "secret" meaning that they are not searchable, but anyone who knows the URL can access them.
 
 ![example Gist](extras/doc/example-gist.png "Example Gist")
 
@@ -43,8 +43,18 @@ You can remove a reader from the recipients who can read your future messages by
 - [defunkt/gist](https://github.com/defunkt/gist), a command line Gist client
 
 ## Installation
+
 1. Install the *gpg*, *t* and *gist* binaries, so that they are in the $PATH.
+
 2. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
+
+## Known issues
+
+By design, *my-shadow* relies on the generosity of the free services it is built upon: Twitter and GitHub's Gist. This dependence is also *my-shadow*'s main weakness, in case the services changed. For example:
+
+- Twitter may decide that the use *my-shadow* makes of their service violates [their T&Cs](https://twitter.com/tos), or they may change the T&Cs to make it so. Twitter may take down your Shadow feed and you may never be able to recover the list of your past updates unless you made a backup of it.
+
+- GitHub says that anonymous gists like the ones used by *my-shadow* [are never deleted](https://help.github.com/articles/creating-gists/#creating-an-anonymous-gist) but they may change their mind.
 
 ## What's next
 
