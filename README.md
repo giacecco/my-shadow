@@ -42,9 +42,13 @@ The output is valid CSV text, and uses the same format as *t*. Note that the tex
 
 ## How do I decide who can read me?
 
-At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you. There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some time in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
+At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you.
+
+There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
 
 The creation of the keypairs is done by running ```./create-recipient [recipient name or nickname]```. The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. The keys are created without a password and are stored in the ```secret``` folder. The recipient's name is not stored anywhere in the keys, but only in the names of the files. It is important you keep that folder secure, and you may not want to backup it conventionally, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+
+Don't forget to create a user for yourself if you want to be able to read your own Shadow without impersonating one of your readers.
 
 You can remove a reader from the recipients who can read your future messages by deleting her keypair from the ```secret``` folder.
 
@@ -58,9 +62,11 @@ You can remove a reader from the recipients who can read your future messages by
 
 ## Installation
 
-1. Install the *gpg*, *t*, *gist* and *csvfix* binaries, so that they are in the $PATH.
+1. If you don't use it already, install *GPG* and configure it normally, as if you wanted to exchange encrypted messages without using *my-shadow*. This means creating your own general purpose keypair etc.
 
-2. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
+2. Install all the other prerequisites and make the *gpg*, *t*, *gist* and *csvfix* binaries, so that they are in the $PATH. Check that they work.
+
+3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
 
 ## Known issues
 
