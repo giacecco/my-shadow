@@ -78,10 +78,6 @@ By design, *my-shadow* relies on the generosity of the free services it is built
 
 The way the keypairs are not password protected is also a weakness, as it requires the user to be strict in limiting access to the files. However, we thought that the effort required of the user to store each reader's secret key password until the day the key is handed over to the reader would have added a level of complexity that was worse than the complication of the current solution.
 
-## What's next
-
-Assuming you want someone to read you, it is not an easy job for them, as they need to manually decrypt the messages posted on Gist. I'll be soon writing a wrapper to *t* that automatically decrypts tweets that appear to be generated using *my-shadow*.
-
 ## Disclaimer
 
 GPG security is great, but no encryption is safe forever. *my-shadow* uses GPG's strongest possible, 4096 bit RSA keys, but as computers become more powerful and inexpensive someone some day will be able to crack open your *my-shadow* feed. Moreover, you may make silly mistakes, such as share any of your readers' private keys in the clear on the Internet, e.g. sending the key to them by email etc. Don't try to blame me when something goes wrong and your Shadow is unveiled.
