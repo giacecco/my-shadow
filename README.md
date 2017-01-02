@@ -29,6 +29,17 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 
 ![example tweet](extras/doc/example-tweet.png "Example tweet")
 
+Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
+
+```
+./timeline
+ID,Posted at,Screen name,Text
+815497526019321856,2017-01-01 09:58:56 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
+815283589197733889,2016-12-31 19:48:49 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
+```
+
+The output is valid CSV text, and uses the same format as *t*. Note that the text is truncated to 140 characters, as in Twitter, and ignore new lines. I will soon offer a way to easily read the full text of the original message by specifying the tweet IDs (the long number in the first column above).
+
 ## How do I decide who can read me?
 
 At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you. There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some time in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
@@ -47,7 +58,7 @@ You can remove a reader from the recipients who can read your future messages by
 
 ## Installation
 
-1. Install the *gpg*, *t* and *gist* binaries, so that they are in the $PATH.
+1. Install the *gpg*, *t*, *gist* and *csvfix* binaries, so that they are in the $PATH.
 
 2. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
 
