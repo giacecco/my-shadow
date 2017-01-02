@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./read-gist $(t status --csv --decode-uris --profile=./secret/twitter.credentials $1 | csvfix order -smq -ifn -f 4)
