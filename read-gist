@@ -1,0 +1,25 @@
+#!/bin/bash
+
+TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
+wget -qO - $1 > $TEMP_FILE
+COMMAND="gpg -dq --no-default-keyring"
+PRIVATE_KEYS=./secret/*.sec
+for FILE in $PRIVATE_KEYS; do
+    COMMAND="$COMMAND --secret-keyring $FILE --keyring ./secret/$(basename $FILE .sec).pub"
+done
+DECRYPTED_MESSAGE=$($COMMAND $TEMP_FILE 2> $TEMP_FILE.error)
+# Two errors can happen here:
+# - "gpg: no valid OpenPGP data found." if there is no OpenPGP data at that URL, or
+# - "gpg: decryption failed: secret key not available" if I don't have any suitable key
+# Often, another general "gpg: decrypt_message failed: eof" error may be printed, too
+ERROR=$(cat $TEMP_FILE.error)
+ERROR_CHARACTERS=$(echo "$ERROR" | wc -m)
+if echo "$ERROR" | grep -qE "gpg: no valid OpenPGP data found"; then
+    DECRYPTED_MESSAGE="my-shadow: no valid my-shadow data found"
+elif echo "$ERROR" | grep -qE "gpg: decryption failed: secret key not available"; then
+    DECRYPTED_MESSAGE="my-shadow: decryption failed: secret key not available"
+elif [ "$ERROR_CHARACTERS" -gt "1" ]; then
+    DECRYPTED_MESSAGE="my-shadow: unknown error"
+fi
+echo "$DECRYPTED_MESSAGE"
+rm -f $TEMP_FILE $TEMP_FILE.error

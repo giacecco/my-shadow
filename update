@@ -9,4 +9,4 @@ done
 $COMMAND $1
 GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
 t update "$GIST_URL" --profile=secret/twitter.credentials > /dev/null
-rm $TEMP_FILE
+rm -f $TEMP_FILE

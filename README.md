@@ -29,11 +29,26 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 
 ![example tweet](extras/doc/example-tweet.png "Example tweet")
 
+Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
+
+```
+./timeline
+ID,Posted at,Screen name,Text
+815497526019321856,2017-01-01 09:58:56 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
+815283589197733889,2016-12-31 19:48:49 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
+```
+
+The output is valid CSV text, and uses the same format as *t*. Note that the text is truncated to 140 characters, as in Twitter, and ignore new lines. I will soon offer a way to easily read the full text of the original message by specifying the tweet IDs (the long number in the first column above).
+
 ## How do I decide who can read me?
 
-At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you. There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some time in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
+At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you.
+
+There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
 
 The creation of the keypairs is done by running ```./create-recipient [recipient name or nickname]```. The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. The keys are created without a password and are stored in the ```secret``` folder. The recipient's name is not stored anywhere in the keys, but only in the names of the files. It is important you keep that folder secure, and you may not want to backup it conventionally, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+
+Don't forget to create a user for yourself if you want to be able to read your own Shadow without impersonating one of your readers.
 
 You can remove a reader from the recipients who can read your future messages by deleting her keypair from the ```secret``` folder.
 
@@ -43,12 +58,15 @@ You can remove a reader from the recipients who can read your future messages by
 - GPG 1.x
 - [sferik/t](https://github.com/sferik/t), a command line Twitter client
 - [defunkt/gist](https://github.com/defunkt/gist), a command line Gist client
+- [csvfix](http://neilb.bitbucket.org/csvfix/), a command line CSV wrangler
 
 ## Installation
 
-1. Install the *gpg*, *t* and *gist* binaries, so that they are in the $PATH.
+1. If you don't use it already, install *GPG* and configure it normally, as if you wanted to exchange encrypted messages without using *my-shadow*. This means creating your own general purpose keypair etc.
 
-2. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
+2. Install all the other prerequisites and make the *gpg*, *t*, *gist* and *csvfix* binaries, so that they are in the $PATH. Check that they work.
+
+3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
 
 ## Known issues
 
