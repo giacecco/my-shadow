@@ -1,0 +1,13 @@
+#!/bin/bash
+
+FEED=$(t timeline --csv --decode-uris --profile="$1")
+#FEED=$(cat foobar.csv)
+NEW_FEED="$(echo "$FEED" | head -1)\n"
+FEED=$(echo "$FEED" | tail -n +2)
+for LINE in "$FEED"; do
+    if echo "$LINE" | grep -qE "https://gist.github.com/anonymous/[a-z0-9]{32}/raw"
+        then NEW_FEED="$NEW_FEED$LINE\n"
+        else NEW_FEED="$NEW_FEED$LINE\n"
+    fi
+done
+echo -e "$NEW_FEED"

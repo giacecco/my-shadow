@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
+wget -qO - $1 > $TEMP_FILE
+COMMAND="gpg -dq --no-default-keyring"
+PRIVATE_KEYS=./secret/*.sec
+for FILE in $PRIVATE_KEYS; do
+    COMMAND="$COMMAND --secret-keyring $FILE --keyring ./secret/$(basename $FILE .sec).pub"
+done
+COMMAND="$COMMAND $TEMP_FILE"
+$COMMAND
