@@ -6,7 +6,7 @@ NEW_FEED=$(echo -e "$FEED" | head -1)
 FEED=$(echo -e "$FEED" | tail -n +2)
 for LINE in $FEED; do
     if echo "$LINE" | grep -qE "https://gist.github.com/anonymous/[a-z0-9]{32}/raw"; then
-        LINE=$(echo "$LINE" | csvfix exec -c 'echo \"$(./read-gist %4 | cut -c1-140)\"' | csvfix exclude -f 4)
+        LINE=$(echo "$LINE" | csvfix exec -smq -c 'echo \"$(./read-gist %4 | cut -c1-140)\"' | csvfix exclude -smq -f 4)
     fi
     NEW_FEED="$NEW_FEED"$'\n'"$LINE"
 done
