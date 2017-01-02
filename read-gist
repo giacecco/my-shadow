@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#TODO: fail quietly if it can't interpret whatever is at the given URL
+
 TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
 wget -qO - $1 > $TEMP_FILE
 COMMAND="gpg -dq --no-default-keyring"
@@ -9,3 +11,4 @@ for FILE in $PRIVATE_KEYS; do
 done
 COMMAND="$COMMAND $TEMP_FILE"
 $COMMAND
+rm -f $TEMP_FILE

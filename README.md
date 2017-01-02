@@ -43,6 +43,7 @@ You can remove a reader from the recipients who can read your future messages by
 - GPG 1.x
 - [sferik/t](https://github.com/sferik/t), a command line Twitter client
 - [defunkt/gist](https://github.com/defunkt/gist), a command line Gist client
+- [csvfix](http://neilb.bitbucket.org/csvfix/), a command line CSV wrangler
 
 ## Installation
 
