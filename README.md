@@ -21,7 +21,15 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 ## How does it work?
 
-You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```. In the background, the message is encrypted using [GnuPG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
+You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```.
+
+```
+$ echo "I feel like eating pizza now!" > message.txt
+$ ./update message.txt
+$
+```
+
+In the background, the message is encrypted using [GnuPG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
 
 ![example Gist](extras/doc/example-gist.png "Example Gist")
 
@@ -34,10 +42,12 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
 
 ```
-./timeline
+$ ./timeline
 ID,Posted at,Screen name,Text
+815942398660452352,2017-01-02 15:26:41 +0000,giaceccosshadow,I feel like eating pizza now!
 815497526019321856,2017-01-01 09:58:56 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
 815283589197733889,2016-12-31 19:48:49 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
+$
 ```
 
 The output is valid CSV text, and uses the same format as *t*. Note that the text is truncated to 140 characters, as in Twitter, and new lines are ignored. To read the full message, and see any new lines, do ```./read-status [status_id]```, where *status_id* is the tweet ID, that is the long number in the first column of the CSV.
