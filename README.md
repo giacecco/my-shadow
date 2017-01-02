@@ -24,8 +24,8 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```.
 
 ```
-$ echo "I feel like eating pizza now!" > message.txt
-$ ./update message.txt
+$ echo "I feel like eating pizza now!" > /tmp/message.txt
+$ ./update /tmp/message.txt
 $
 ```
 
