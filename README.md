@@ -50,33 +50,37 @@ ID,Posted at,Screen name,Text
 $
 ```
 
-The output is valid CSV text, and uses the same format as *t*. Note that the text is truncated to 140 characters, as in Twitter, and new lines are ignored. To read the full message, and see any new lines, do ```./read-status [status_id]```, where *status_id* is the tweet ID, that is the long number in the first column of the CSV.
+The output is valid CSV text, in case someone wanted to build a fancy GUI on top of this. Note that the text is truncated to 140 characters, as in Twitter, and new lines are ignored. To read the full message, and see any new lines, do ```./read-status [status_id]```, where *status_id* is the tweet ID, that is the long number in the first column of the CSV.
 
 ## How do I decide who can read me?
 
-At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you.
+At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you. Don't forget to create a user for yourself if you want to be able to read your own Shadow.
 
-There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are: a) you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready, and b) public keys can reveal the identity of their owner, and you may not want your readers to know who the other readers are.
+There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are:
 
-The creation of the keypairs is done by running ```./create-recipient [recipient name or nickname]```. The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. The keys are created without a password and are stored in the ```secret``` folder. The recipient's name is not stored anywhere in the keys, but only in the names of the files. It is important you keep that folder secure, and you may not want to backup it conventionally, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+A. you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready;
+B. you may also want to revoke that privilege for future messages, and  
+C. public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your readers to know who the other readers are.
 
-Don't forget to create a user for yourself if you want to be able to read your own Shadow without impersonating one of your readers.
+The creation of keypairs is done by running ```./create-recipient "[recipient nickname]"```. The keys are created without a password and are stored in the ```secret``` folder. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
 
-You can remove a reader from the recipients who can read your future messages by deleting her keypair from the ```secret``` folder.
+The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```). It is important that you keep that folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+
+You can prevent a reader from reading future messages by deleting her keypair from the ```secret``` folder.
 
 ## Requirements
 *my-shadow* was developed and tested on Fedora 24. It should work without changes on most Linux distributions and, with little adaptation, on Mac. Requirements are:
 
-- GPG 1.x
+- GnuPG 1.x
 - [sferik/t](https://github.com/sferik/t), a command line Twitter client
 - [defunkt/gist](https://github.com/defunkt/gist), a command line Gist client
 - [csvfix](http://neilb.bitbucket.org/csvfix/), a command line CSV wrangler
 
 ## Installation
 
-1. If you don't use it already, install *GPG* and configure it normally, as if you wanted to exchange encrypted messages without using *my-shadow*. This means creating your own general purpose keypair etc.
+1. If you don't use it already, install *GnuPG* and configure it normally, as if you wanted to exchange encrypted messages without using *my-shadow*. This means creating your own general purpose keypair etc. **Your default private key is the one that is used for encryption** (but [this may change](https://github.com/Digital-Contraptions-Imaginarium/my-shadow/issues/6), opinions are welcome).
 
-2. Install all the other prerequisites and make the *gpg*, *t*, *gist* and *csvfix* binaries, so that they are in the $PATH. Check that they work.
+2. Install all the other prerequisites and make the ```gpg```, ```t```, ```gist``` and ```csvfix``` binaries discoverable in the $PATH. Check that they work.
 
 3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
 
