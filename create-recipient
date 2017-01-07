@@ -16,5 +16,3 @@ echo "
     %commit
     %echo done
 " | gpg --batch --verbose --no-default-keyring --gen-key
-#gpg --no-default-keyring --keyring ./secret/pubring.gpg --import ./secret/$1.pub
-#gpg --sign-key $PSEUDO_NAME
