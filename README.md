@@ -68,6 +68,21 @@ The creation of keypairs is done by using the ```createrecipient``` command, e.g
 
 ```
 $ myshadow createrecipient "mickey mouse"
+gpg: writing public key to `/home/giacecco/.myshadow/mickey mouse.pub'
+gpg: writing secret key to `/home/giacecco/.myshadow/mickey mouse.sec'
+.......+++++
+..........+++++
+gpg: writing self signature
+gpg: RSA/SHA1 signature from: "B4891974 [?]"
+.......+++++
+........+++++
+gpg: writing key binding signature
+gpg: RSA/SHA1 signature from: "B4891974 [?]"
+gpg: RSA/SHA1 signature from: "0B9A9B85 [?]"
+gpg: writing key binding signature
+gpg: RSA/SHA1 signature from: "B4891974 [?]"
+gpg: RSA/SHA1 signature from: "0B9A9B85 [?]"
+gpg: done
 $
 ```
 
