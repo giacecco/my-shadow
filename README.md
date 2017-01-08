@@ -21,11 +21,11 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 ## How does it work?
 
-You write your "update" in a simple text file, say ```message.txt```, and you publish it by doing ```./update message.txt```.
+You write your "update" in a simple text file, say ```message.txt```, and you publish it by using the ```update``` command, as in the example below:
 
 ```
 $ echo "I feel like eating pizza now!" > /tmp/message.txt
-$ ./myshadow update /tmp/message.txt
+$ myshadow update /tmp/message.txt
 $
 ```
 
@@ -42,7 +42,7 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
 
 ```
-$ ./myshadow timeline
+$ myshadow timeline
 ID,Posted at,Screen name,Text
 815942398660452352,2017-01-02 15:26:41 +0000,giaceccosshadow,I feel like eating pizza now!
 815497526019321856,2017-01-01 09:58:56 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
@@ -50,7 +50,7 @@ ID,Posted at,Screen name,Text
 $
 ```
 
-The output is valid CSV text, in case someone wanted to build a fancy GUI on top of this. Note that the text is truncated to 140 characters, as in Twitter, and new lines are ignored. To read the full message, and see any new lines, do ```./read-status [status_id]```, where *status_id* is the tweet ID, that is the long number in the first column of the CSV.
+The output is valid CSV text, in case someone wanted to build a fancy GUI on top of this. Note that the text is truncated to 140 characters, as in Twitter, and new lines are ignored. To read the full message, and see any new lines, do ```myshadow status [status_id]```, where *status_id* is the tweet ID, that is the long number in the first column of the CSV.
 
 ## How do I decide who can read me?
 
@@ -64,9 +64,20 @@ There are many reasons for using original keypairs rather than your reader's pre
 
 - public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your readers to know who the other readers are.
 
-The creation of keypairs is done by running ```./myshadow createrecipient "[recipient nickname]"```. The keys are created without a password and are stored in the ```secret``` folder. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
+The creation of keypairs is done by using the ```createrecipient``` command, e.g.
 
-The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```). It is important that you keep that folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+```
+$ myshadow createrecipient "mickey mouse"
+$
+```
+
+The keypairs are created without a password and are stored in *my-shadow*'s configuration folder, that by default is ```$HOME/.myshadow```. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
+
+You can reference any other folder as *my-shadow*'s home by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```.
+
+The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```).
+
+It is important that you keep *my-shadow*'s home folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
 
 You can prevent a reader from reading future messages by deleting her keypair from the ```secret``` folder.
 
@@ -82,9 +93,9 @@ You can prevent a reader from reading future messages by deleting her keypair fr
 
 1. If you don't use it already, install *GnuPG* and configure it normally, as if you wanted to exchange encrypted messages without using *my-shadow*. This means creating your own general purpose keypair etc. **Your default private key is the one that is used for encryption** (but [this may change](https://github.com/Digital-Contraptions-Imaginarium/my-shadow/issues/6), opinions are welcome).
 
-2. Install all the other prerequisites and make the ```gpg```, ```t```, ```gist``` and ```csvfix``` binaries discoverable in the $PATH. Check that they work.
+2. Install all the other prerequisites and make the ```gpg```, ```t```, ```gist``` and ```csvfix``` binaries and the ```myshadow``` bash file discoverable in the $PATH. Check that they work.
 
-3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```secret/twitter.credentials```. Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=secret/twitter.credentials```.
+3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```$HOME/.myshadow/twitter.credentials``` (or any other folder you have chosen as *my-shadow*'s home). Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=$HOME/.myshadow/twitter.credentials```.
 
 ## Known issues
 
