@@ -25,7 +25,7 @@ You write your "update" in a simple text file, say ```message.txt```, and you pu
 
 ```
 $ echo "I feel like eating pizza now!" > /tmp/message.txt
-$ ./update /tmp/message.txt
+$ ./myshadow update /tmp/message.txt
 $
 ```
 
@@ -42,7 +42,7 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
 
 ```
-$ ./timeline
+$ ./myshadow timeline
 ID,Posted at,Screen name,Text
 815942398660452352,2017-01-02 15:26:41 +0000,giaceccosshadow,I feel like eating pizza now!
 815497526019321856,2017-01-01 09:58:56 +0000,giaceccosshadow,"[CAN'T TOUCH THIS]"
@@ -58,11 +58,13 @@ At the moment, it is up to you to create an original GPG keypair for each reader
 
 There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are:
 
-A. you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready;
-B. you may also want to revoke that privilege for future messages, and  
-C. public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your readers to know who the other readers are.
+- you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready;
 
-The creation of keypairs is done by running ```./create-recipient "[recipient nickname]"```. The keys are created without a password and are stored in the ```secret``` folder. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
+- you may also want to revoke that privilege for future messages, and  
+
+- public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your readers to know who the other readers are.
+
+The creation of keypairs is done by running ```./myshadow createrecipient "[recipient nickname]"```. The keys are created without a password and are stored in the ```secret``` folder. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
 
 The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```). It is important that you keep that folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
 

@@ -1,0 +1,139 @@
+#!/bin/bash
+
+# the operation is case insensitive
+case $(echo "${1,,}") in
+    "createrecipient" ) OPERATION="createrecipient" ;;
+    "gist" ) OPERATION="readgist" ;;
+    "status" ) OPERATION="readstatus" ;;
+    "timeline" ) OPERATION="timeline" ;;
+    "update" ) OPERATION="update" ;;
+    * )
+        echo "Command '$1' not recognized."
+        exit 1
+        ;;
+esac
+
+shift
+while true; do
+    case "$1" in
+        "" ) # no more parameters to process
+            break ;;
+        -t | --twitter )
+            TWITTER=true ; shift ;;
+        * )
+            case "$OPERATION" in
+                "createrecipient" ) RECIPIENT_NICKNAME="$1" ; shift ;;
+                "readgist"        ) GIST_URL="$1" ; shift ;;
+                "readstatus"      ) STATUS_ID="$1" ; shift ;;
+                "update"          ) INPUT_FILE="$1" ; shift ;;
+            esac ;;
+    esac
+done
+
+case "$OPERATION" in
+
+    "createrecipient" )
+
+        # ******************************************************************* #
+        # Find out more about unattended key generation at
+        # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+        PSEUDO_NAME=$(cat /proc/sys/kernel/random/uuid)
+        echo "
+            %pubring ./secret/$RECIPIENT_NICKNAME.pub
+            %secring ./secret/$RECIPIENT_NICKNAME.sec
+            Key-Type: RSA
+            Key-Length: 4096
+            Subkey-Type: RSA
+            Subkey-Length: 4096
+            Name-Real: $PSEUDO_NAME
+            Expire-Date: 0
+            %commit
+            %echo done
+        " | gpg --batch --verbose --no-default-keyring --gen-key
+        # ******************************************************************* #
+        ;;
+
+    "readgist" )
+
+        # ******************************************************************* #
+        TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
+        wget -qO - $GIST_URL > $TEMP_FILE
+        COMMAND="gpg -dq --no-default-keyring"
+        PRIVATE_KEYS=./secret/*.sec
+        for FILE in $PRIVATE_KEYS; do
+            COMMAND="$COMMAND --secret-keyring $FILE --keyring ./secret/$(basename $FILE .sec).pub"
+        done
+        DECRYPTED_MESSAGE=$($COMMAND $TEMP_FILE 2> $TEMP_FILE.error)
+        # Two errors can happen here:
+        # - "gpg: no valid OpenPGP data found." if there is no OpenPGP data at that URL, or
+        # - "gpg: decryption failed: secret key not available" if I don't have any suitable key
+        # Often, another general "gpg: decrypt_message failed: eof" error may be printed, too
+        ERROR=$(cat $TEMP_FILE.error)
+        ERROR_CHARACTERS=$(echo "$ERROR" | wc -m)
+        if echo "$ERROR" | grep -qE "gpg: no valid OpenPGP data found"; then
+            DECRYPTED_MESSAGE="my-shadow: no valid my-shadow data found"
+        elif echo "$ERROR" | grep -qE "gpg: decryption failed: secret key not available"; then
+            DECRYPTED_MESSAGE="my-shadow: decryption failed: secret key not available"
+        elif [ "$ERROR_CHARACTERS" -gt "1" ]; then
+            DECRYPTED_MESSAGE="my-shadow: unknown error"
+        fi
+        # TODO: see http://stackoverflow.com/a/5302644 ; this is a dirty solution to the
+        # problem, parameters should be supported before the URL
+        if [ "$TWITTER" = "true" ] && [ ${#DECRYPTED_MESSAGE} -ge 135 ]
+        then
+            # see http://askubuntu.com/a/513772/581904 for the magical sed command;
+            # it's the only one that really worked
+            DECRYPTED_MESSAGE=$(echo "$DECRYPTED_MESSAGE" | sed -e :a -e '/$/N; s/\n/ /; ta' | cut -c1-134)" (...)"
+        fi
+        echo "$DECRYPTED_MESSAGE"
+        rm -f $TEMP_FILE $TEMP_FILE.error
+        # ******************************************************************* #
+        ;;
+
+    "readstatus" )
+
+        # ******************************************************************* #
+        COMMAND="./myshadow gist"
+        if [ "$TWITTER" = "true" ] ; then
+            COMMAND="$COMMAND --twitter"
+        fi
+        COMMAND="$COMMAND | $(t status --csv --decode-uris --profile=./secret/twitter.credentials $STATUS_ID | csvfix order -smq -ifn -f 4)"
+        $COMMAND
+        # ******************************************************************* #
+        ;;
+
+    "timeline" )
+
+        # ******************************************************************* #
+        IFS=$'\n' # see http://superuser.com/q/284187/626788
+        FEED=$(t timeline --csv --decode-uris --profile=./secret/twitter.credentials)
+        NEW_FEED=$(echo -e "$FEED" | head -1)
+        FEED=$(echo -e "$FEED" | tail -n +2)
+        for LINE in $FEED; do
+            if echo "$LINE" | grep -qE "https://gist.github.com/anonymous/[a-z0-9]{32}/raw"; then
+                # note that in CSV the double quotes are escaped by repeating them, hence the sed command below
+                LINE=$(echo "$LINE" | csvfix exec -smq -c 'echo \"$(./myshadow gist --twitter %4 | sed -e s/\"/\"\"/g)\"' | csvfix exclude -smq -f 4)
+            fi
+            NEW_FEED="$NEW_FEED"$'\n'"$LINE"
+        done
+        echo -e "$NEW_FEED"
+        # ******************************************************************* #
+        ;;
+
+    "update" )
+
+        # ******************************************************************* #
+        TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
+        COMMAND="gpg -ea --output $TEMP_FILE --always-trust"
+        PUBLIC_KEYS=./secret/*.pub
+        for FILE in $PUBLIC_KEYS; do
+            COMMAND="$COMMAND --keyring $FILE -r $(gpg --no-default-keyring --keyring $FILE --list-keys | grep "^sub" | grep -Po '(?<=/)[A-Z0-9]{8}(?= )')"
+        done
+        $COMMAND $INPUT_FILE
+        GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
+        t update "$GIST_URL" --profile=secret/twitter.credentials > /dev/null
+        rm -f $TEMP_FILE
+        # ******************************************************************* #
+        ;;
+
+esac
