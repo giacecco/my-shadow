@@ -88,7 +88,7 @@ $
 
 The keypairs are created without a password and are stored in *my-shadow*'s configuration folder, that by default is ```$HOME/.myshadow```. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
 
-You can reference any other folder as *my-shadow*'s home by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```.
+You can choose any other folder as *my-shadow*'s home by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```. The folder is created if it does not exist already.
 
 The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```).
 
