@@ -1,23 +1,56 @@
 #!/bin/bash
 
+# the operation is case insensitive
+case $(echo ${1,,}) in
+    "createrecipient" ) OPERATION="createrecipient" ;;
+    "gist" ) OPERATION="readgist" ;;
+    "status" ) OPERATION="readstatus" ;;
+esac
+
 while true; do
-    case "$1" in
-        "gist" )
-            OPERATION="readgist"
-            GIST_URL="$2"
-            shift 2
-            ;;
-        "status" )
-            OPERATION="readstatus"
-            STATUS_ID="$2"
-            shift 2
-            ;;
+    case "$2" in
         -t | --twitter ) TWITTER=true; shift ;;
-        * ) break ;;
+        * )
+            case "$OPERATION" in
+                "createrecipient" )
+                    RECIPIENT_NICKNAME="$2"
+                    shift
+                    ;;
+                "readgist" )
+                    GIST_URL="$2"
+                    shift
+                    ;;
+                "readstatus" )
+                    STATUS_ID="$2"
+                    shift
+                    ;;
+            esac
+            break ;;
     esac
 done
 
 case "$OPERATION" in
+
+    "createrecipient" )
+
+        # ******************************************************************* #
+        # Find out more about unattended key generation at
+        # https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html
+        PSEUDO_NAME=$(cat /proc/sys/kernel/random/uuid)
+        echo "
+            %pubring ./secret/$RECIPIENT_NICKNAME.pub
+            %secring ./secret/$RECIPIENT_NICKNAME.sec
+            Key-Type: RSA
+            Key-Length: 4096
+            Subkey-Type: RSA
+            Subkey-Length: 4096
+            Name-Real: $PSEUDO_NAME
+            Expire-Date: 0
+            %commit
+            %echo done
+        " | gpg --batch --verbose --no-default-keyring --gen-key
+        # ******************************************************************* #
+        ;;
 
     "readgist" )
 
