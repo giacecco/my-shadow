@@ -137,8 +137,8 @@ case "$OPERATION" in
 
         # ******************************************************************* #
         IFS=$'\n' # see http://superuser.com/q/284187/626788
-        FEED="$(cat /home/giacecco/Documents/Dico.im/Projects/my-shadow/foobar.csv)"
-        #FEED="$(t timeline --csv --decode-uris --profile=$MYSHADOW_HOME/twitter.credentials)"
+        #FEED="$(cat /home/giacecco/Documents/Dico.im/Projects/my-shadow/foobar.csv)"
+        FEED="$(t timeline --csv --decode-uris --profile=$MYSHADOW_HOME/twitter.credentials)"
         NEW_FEED=$(echo -e "$FEED" | head -1)
         FEED=$(echo -e "$FEED" | tail -n +2)
         for LINE in $FEED; do
