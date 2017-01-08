@@ -43,6 +43,8 @@ while true; do
             if [ "$MYSHADOW_HOMES" = "" ] ; then
                 MYSHADOW_HOMES=$(abspath "$2")
             elif [ "$OPERATION" = "createrecipient" ] || [ "$OPERATION" = "update" ] ; then
+                # TODO: should I warn the user when multiple --shadow are
+                # specified for unsupported commands?
                 MYSHADOW_HOMES="$MYSHADOW_HOMES:"$(abspath "$2")
             fi
             shift 2
@@ -59,12 +61,12 @@ while true; do
     esac
 done
 
-# Sets the default keys folder, if none was specified
+# Sets the default keypair folder, if none was specified
 if [ "$MYSHADOW_HOMES" = "" ] ; then
     MYSHADOW_HOMES=$(abspath "$HOME/.myshadow")
 fi
 
-# Creates the specified my-shadow key folders if they don't exist
+# Creates the specified my-shadow keypair folders if they don't exist
 for MYSHADOW_HOME in $(echo $MYSHADOW_HOMES | sed "s/:/ /g") ; do
     mkdir -p $MYSHADOW_HOME
 done
@@ -118,10 +120,7 @@ case "$OPERATION" in
         elif [ "$ERROR_CHARACTERS" -gt "1" ]; then
             DECRYPTED_MESSAGE="my-shadow: unknown error"
         fi
-        # TODO: see http://stackoverflow.com/a/5302644 ; this is a dirty solution to the
-        # problem, parameters should be supported before the URL
-        if [ "$TWITTER" = "true" ] && [ ${#DECRYPTED_MESSAGE} -ge 135 ]
-        then
+        if [ "$TWITTER" = "true" ] && [ ${#DECRYPTED_MESSAGE} -ge 135 ] ; then
             # see http://askubuntu.com/a/513772/581904 for the magical sed command;
             # it's the only one that really worked
             DECRYPTED_MESSAGE=$(echo "$DECRYPTED_MESSAGE" | sed -e :a -e '/$/N; s/\n/ /; ta' | cut -c1-134)" (...)"
@@ -134,7 +133,7 @@ case "$OPERATION" in
     "readstatus" )
 
         # ******************************************************************* #
-        COMMAND="myshadow gist --shadow $MYSHADOW_HOMES "
+        COMMAND="myshadow gist --shadow $MYSHADOW_HOMES"
         if [ "$TWITTER" = "true" ] ; then
             COMMAND="$COMMAND --twitter"
         fi
@@ -145,19 +144,17 @@ case "$OPERATION" in
         # outputs an error like "/usr/local/bin/t: No status found with that ID."
         # TODO: manage the situation when the status id exists but it is not a
         # valid my-secret gist
-        COMMAND="$COMMAND $GIST_URL"
-        $COMMAND
+        $COMMAND $GIST_URL
         # ******************************************************************* #
         ;;
 
     "timeline" )
 
         # ******************************************************************* #
-        IFS=$'\n' # see http://superuser.com/q/284187/626788
-        #FEED="$(cat /home/giacecco/Documents/Dico.im/Projects/my-shadow/foobar.csv)"
         FEED="$(t timeline --csv --decode-uris --profile=$MYSHADOW_HOMES/twitter.credentials)"
         NEW_FEED=$(echo -e "$FEED" | head -1)
         FEED=$(echo -e "$FEED" | tail -n +2)
+        IFS=$'\n' # see http://superuser.com/q/284187/626788
         for LINE in $FEED; do
             if echo "$LINE" | grep -qE "https://gist.github.com/anonymous/[a-z0-9]{32}/raw"; then
                 GIST_URL=$(echo "$LINE" | csvfix order -smq -f 4)
@@ -192,7 +189,7 @@ case "$OPERATION" in
     "showversion" )
 
         # ******************************************************************* #
-        echo "my-secret 0.0.42
+        echo "my-secret 0.0.43
 Copyright (C) 2017 Digital Contraptions Imaginarium Ltd.
 License MIT <https://raw.githubusercontent.com/Digital-Contraptions-Imaginarium/my-shadow/master/LICENSE>
 
