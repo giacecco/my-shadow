@@ -26,6 +26,7 @@ case $(echo "${1,,}") in
     "status" ) OPERATION="readstatus" ;;
     "timeline" ) OPERATION="timeline" ;;
     "update" ) OPERATION="update" ;;
+    "version" ) OPERATION="showversion" ;;
     * )
         echo "Command '$1' not recognized."
         exit 1
@@ -167,6 +168,17 @@ case "$OPERATION" in
         GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
         t update "$GIST_URL" --profile=$MYSHADOW_HOME/twitter.credentials > /dev/null
         rm -f $TEMP_FILE
+        # ******************************************************************* #
+        ;;
+
+    "showversion" )
+
+        # ******************************************************************* #
+        echo "my-secret 0.0.40
+Copyright (C) 2017 Digital Contraptions Imaginarium Ltd.
+License MIT <https://raw.githubusercontent.com/Digital-Contraptions-Imaginarium/my-shadow/master/LICENSE>
+
+Home: $MYSHADOW_HOME"
         # ******************************************************************* #
         ;;
 
