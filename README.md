@@ -86,13 +86,13 @@ gpg: done
 $
 ```
 
-The keypairs are created without a password and are stored in *my-shadow*'s configuration folder, that by default is ```$HOME/.myshadow```. The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
-
-You can choose any other folder as *my-shadow*'s home by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```. The folder is created if it does not exist already.
+The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
 
 The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```).
 
-It is important that you keep *my-shadow*'s home folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
+The keypairs are created without a password and are stored in *my-shadow*'s keys folder, that by default is ```$HOME/.myshadow```. You can choose any other folder by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```. The folder is created if it does not exist already. Different keys folders can be used to broadcast different updates to different audiences, e.g. one for your friends, one for your family etc.
+
+It is important that you keep *my-shadow*'s keys folder secure, and that you don't backup it lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
 
 You can prevent a reader from reading future messages by deleting her keypair from the ```secret``` folder.
 
@@ -110,7 +110,7 @@ You can prevent a reader from reading future messages by deleting her keypair fr
 
 2. Install all the other prerequisites and make the ```gpg```, ```t```, ```gist``` and ```csvfix``` binaries and the ```myshadow``` bash file discoverable in the $PATH. Check that they work.
 
-3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```$HOME/.myshadow/twitter.credentials``` (or any other folder you have chosen as *my-shadow*'s home). Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=$HOME/.myshadow/twitter.credentials```.
+3. Configure *t* and move the Twitter credentials file created by doing so from ```~/.trc``` to ```$HOME/.myshadow/twitter.credentials``` (or any other folder you have chosen as *my-shadow*'s keys folder). Test to see if *t* works, e.g. by reading someone else's timeline: ```t timeline giacecco --profile=$HOME/.myshadow/twitter.credentials```.
 
 ## Known issues
 
