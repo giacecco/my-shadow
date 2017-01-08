@@ -2,12 +2,13 @@
 
 IFS=$'\n' # see http://superuser.com/q/284187/626788
 FEED=$(t timeline --csv --decode-uris --profile=./secret/twitter.credentials)
+#FEED=$(cat foobar)
 NEW_FEED=$(echo -e "$FEED" | head -1)
 FEED=$(echo -e "$FEED" | tail -n +2)
 for LINE in $FEED; do
     if echo "$LINE" | grep -qE "https://gist.github.com/anonymous/[a-z0-9]{32}/raw"; then
         # note that in CSV the double quotes are escaped by repeating them, hence the sed command below
-        LINE=$(echo "$LINE" | csvfix exec -smq -c 'echo \"$(./read-gist %4 | cut -c1-140 | sed -e s/\"/\"\"/g)\"' | csvfix exclude -smq -f 4)
+        LINE=$(echo "$LINE" | csvfix exec -smq -c 'echo \"$(./read-gist %4 --twitter | sed -e s/\"/\"\"/g)\"' | csvfix exclude -smq -f 4)
     fi
     NEW_FEED="$NEW_FEED"$'\n'"$LINE"
 done

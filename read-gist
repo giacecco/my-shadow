@@ -21,5 +21,13 @@ elif echo "$ERROR" | grep -qE "gpg: decryption failed: secret key not available"
 elif [ "$ERROR_CHARACTERS" -gt "1" ]; then
     DECRYPTED_MESSAGE="my-shadow: unknown error"
 fi
+# TODO: see http://stackoverflow.com/a/5302644 ; this is a dirty solution to the
+# problem, parameters should be supported before the URL
+if [[ $@ == **--twitter** ]]
+then
+    # see http://askubuntu.com/a/513772/581904 for the magical sed command;
+    # it's the only one that really worked
+    DECRYPTED_MESSAGE=$(echo "$DECRYPTED_MESSAGE" | sed -e :a -e '/$/N; s/\n/ /; ta' | cut -c1-140)
+fi
 echo "$DECRYPTED_MESSAGE"
 rm -f $TEMP_FILE $TEMP_FILE.error
