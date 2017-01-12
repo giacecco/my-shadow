@@ -171,6 +171,13 @@ case "$OPERATION" in
     "update" )
 
         # ******************************************************************* #
+        if [ "$INPUT_FILE" = "" ] ; then
+            echo "Write your update and terminate with CTRL-D..."
+            CLEAR_TEXT=$(cat)
+            echo "Sending..."
+        else
+            CLEAR_TEXT=$(cat "$INPUT_FILE")
+        fi
         for MYSHADOW_HOME in $(echo $MYSHADOW_HOMES | sed "s/:/ /g") ; do
             TEMP_FILE="/tmp/$(cat /proc/sys/kernel/random/uuid).asc"
             COMMAND="gpg -ea --output $TEMP_FILE --always-trust"
@@ -178,7 +185,7 @@ case "$OPERATION" in
             for FILE in $PUBLIC_KEYS; do
                 COMMAND="$COMMAND --keyring $FILE -r $(gpg --no-default-keyring --keyring $FILE --list-keys | grep "^sub" | grep -Po '(?<=/)[A-Z0-9]{8}(?= )')"
             done
-            $COMMAND $INPUT_FILE
+            echo "$CLEAR_TEXT" | $COMMAND
             GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
             t update "$GIST_URL" --profile=$MYSHADOW_HOME/twitter.credentials > /dev/null
             rm -f $TEMP_FILE
@@ -189,7 +196,7 @@ case "$OPERATION" in
     "showversion" )
 
         # ******************************************************************* #
-        echo "my-secret 0.0.43
+        echo "my-secret 0.0.45
 Copyright (C) 2017 Digital Contraptions Imaginarium Ltd.
 License MIT <https://raw.githubusercontent.com/Digital-Contraptions-Imaginarium/my-shadow/master/LICENSE>
 

@@ -29,7 +29,7 @@ $ myshadow update /tmp/message.txt
 $
 ```
 
-In the background, the message is encrypted using [GnuPG](https://www.gnupg.org/) so that all of the readers you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
+In the background, the message is encrypted using [GnuPG](https://www.gnupg.org/) so that all of the recipients you have previously configured can read it. The encrypted message is published pseudoanonymously on [Gist](https://gist.github.com/) (it's just *pseudo*anonymously because the people at GitHub will know it came from your IP address).
 
 ![example Gist](extras/doc/example-gist.png "Example Gist")
 
@@ -54,15 +54,7 @@ The output is valid CSV text, in case someone wanted to build a fancy GUI on top
 
 ## How do I decide who can read me?
 
-At the moment, it is up to you to create an original GPG keypair for each reader you want to be able to read you. Don't forget to create a user for yourself if you want to be able to read your own Shadow.
-
-There are many reasons for using original keypairs rather than your reader's pre-existing GPG public key; among these are:
-
-- you may not want your reader to have access to your timeline straight away, but only at some point in the future, when you feel ready;
-
-- you may also want to revoke that privilege for future messages, and  
-
-- public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your readers to know who the other readers are.
+At the moment, it is up to you to create an original GPG keypair for each recipient you want to be able to read you. Note that ***my-shadow* does not use the keys you may already have created and / or stored in your normal use of GPG**. This also means that you need to create a recipient for yourself if you want to be able to read your own Shadow.
 
 The creation of keypairs is done by using the ```createrecipient``` command, e.g.
 
@@ -88,9 +80,17 @@ $
 
 The nickname you've chosen for the recipient is not stored anywhere in the keys, but only in the names of the files.
 
-The day you are ready for your reader to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```).
+The day you are ready for your recipient to actually read your timeline, you will have to find a way to share with her the keypair securely. After you do that, you can delete your copy of the secure key only (the file ending in ```.sec```), as you will still need the public key (the file ending in ```.pub```).
 
 The keypairs are created without a password and are stored in *my-shadow*'s keypair folder, that by default is ```$HOME/.myshadow```. You can choose any other folder by using the ```--shadow``` parameter in all commands, e.g. ```myshadow createrecipient --shadow $HOME/.config/myshadow "[recipient nickname]"```. The folder is created if it does not exist already.
+
+There are many reasons for using dedicated, original keypairs rather than your recipients' pre-existing GPG public keys; among these are:
+
+- you may not want your recipient to have access to your timeline straight away, but only at some point in the future, when you feel ready;
+
+- you may also want to revoke that privilege for future messages, and  
+
+- public, general purpose GPG keys can embed the owner's name and email address and the GPG client shows them at the moment of decryption; you may not want your recipients to know who the other recipients are.
 
 ### Multiple audiences
 
@@ -106,7 +106,7 @@ Note that different keypairs are created for the same recipient, so that you can
 
 It is important that you keep all keypair folders secure, and that you don't backup them lightheartedly, e.g. on an external hard disk or on Amazon AWS without a further layer of encryption.
 
-You can prevent a reader from reading future messages by deleting her keypair from the respective keypair folder.
+You can prevent a recipient from reading future messages by deleting her keypair from the respective keypair folder.
 
 ## Requirements
 *my-shadow* was developed and tested on Fedora 24. It should work without changes on most Linux distributions and, with little adaptation, on Mac. Requirements are:
@@ -132,11 +132,11 @@ By design, *my-shadow* relies on the generosity of the free services it is built
 
 - GitHub says that anonymous gists like the ones used by *my-shadow* [are never deleted](https://help.github.com/articles/creating-gists/#creating-an-anonymous-gist) but they may change their mind.
 
-The way the keypairs are not password protected is also a weakness, as it requires the user to be strict in limiting access to the files. However, we thought that the effort required of the user to store each reader's secret key password until the day the key is handed over to the reader would have added a level of complexity that was worse than the complication of the current solution.
+The way the keypairs are not password protected is also a weakness, as it requires the user to be strict in limiting access to the files. However, we thought that the effort required of the user to store each recipient's secret key password until the day the key is handed over to the recipient would have added a level of complexity that was worse than the complication of the current solution.
 
 ## Disclaimer
 
-GPG security is great, but no encryption is safe forever. *my-shadow* uses GPG's strongest possible, 4096 bit RSA keys, but as computers become more powerful and inexpensive someone some day will be able to crack open your *my-shadow* feed. Moreover, you may make silly mistakes, such as share any of your readers' private keys in the clear on the Internet, e.g. sending the key to them by email etc. Don't try to blame me when something goes wrong and your Shadow is unveiled.
+GPG security is great, but no encryption is safe forever. *my-shadow* uses GPG's strongest possible, 4096 bit RSA keys, but as computers become more powerful and inexpensive someone some day will be able to crack open your *my-shadow* feed. Moreover, you may make silly mistakes, such as share any of your recipients' private keys in the clear on the Internet, e.g. sending the key to them by email etc. Don't try to blame me when something goes wrong and your Shadow is unveiled.
 
 ## Licence
 *my-shadow* is released under the MIT licence, see [here](LICENSE).
