@@ -196,7 +196,7 @@ case "$OPERATION" in
     "showversion" )
 
         # ******************************************************************* #
-        echo "my-secret 0.0.45
+        echo "my-secret 0.0.46
 Copyright (C) 2017 Digital Contraptions Imaginarium Ltd.
 License MIT <https://raw.githubusercontent.com/Digital-Contraptions-Imaginarium/my-shadow/master/LICENSE>
 

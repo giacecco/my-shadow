@@ -21,7 +21,14 @@ Alternatively, you may be disciplined enough to do the whole encryption and emai
 
 ## How does it work?
 
-You write your "update" in a simple text file, say ```message.txt```, and you publish it by using the ```update``` command, as in the example below:
+You run the ```myshadow``` script by specifying the ```update``` command, and you write your update:
+
+```
+$ myshadow update
+Write your update and terminate with CTRL-D...
+```
+
+Alternatively, you write your "update" in a simple text file, say ```message.txt```, and you givit as a parameter to the ```update``` command:
 
 ```
 $ echo "I feel like eating pizza now!" > /tmp/message.txt
