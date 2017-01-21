@@ -34,11 +34,16 @@ esac
 
 # Interprets the parameters following the command
 shift
+CLEAR_MESSAGE=""
 MYSHADOW_HOMES=""
 while true; do
     case "$1" in
         "" ) # no more parameters to process
             break ;;
+        -c | --clear )
+            CLEAR_MESSAGE="$2 "
+            shift 2
+            ;;
         -s | --shadow )
             if [ "$MYSHADOW_HOMES" = "" ] ; then
                 MYSHADOW_HOMES=$(abspath "$2")
@@ -187,7 +192,7 @@ case "$OPERATION" in
             done
             echo "$CLEAR_TEXT" | $COMMAND
             GIST_URL=$(gist --raw --anonymous --private $TEMP_FILE)
-            t update "$GIST_URL" --profile=$MYSHADOW_HOME/twitter.credentials > /dev/null
+            t update "$CLEAR_MESSAGE$GIST_URL" --profile=$MYSHADOW_HOME/twitter.credentials > /dev/null
             rm -f $TEMP_FILE
         done
         # ******************************************************************* #
@@ -196,7 +201,7 @@ case "$OPERATION" in
     "showversion" )
 
         # ******************************************************************* #
-        echo "my-secret 0.0.46
+        echo "my-secret 0.0.47
 Copyright (C) 2017 Digital Contraptions Imaginarium Ltd.
 License MIT <https://raw.githubusercontent.com/Digital-Contraptions-Imaginarium/my-shadow/master/LICENSE>
 

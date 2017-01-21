@@ -46,6 +46,14 @@ A link to the secret gist is posted to your "shadow" Twitter feed.
 
 ![example tweet](extras/doc/example-tweet.png "Example tweet")
 
+If you want, you can add some text in clear by using the ```--clear``` or ```-c``` option, e.g.
+
+```
+$ echo "I feel like eating pizza now!" > /tmp/message.txt
+$ myshadow update --clear "#foodie" /tmp/message.txt
+$
+```
+
 Then, to read your shadow Twitter timeline, just use the ```timeline``` command:
 
 ```
